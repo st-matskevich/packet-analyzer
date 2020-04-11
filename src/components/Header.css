@@ -1,0 +1,53 @@
+.App-header {
+    background-color: #222;
+    color: white;
+    flex-direction: column;
+    display: flex;
+}
+
+.App-title{
+    margin: 0;
+}
+
+.frame {
+    flex-direction: row;
+    -webkit-app-region: drag;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    height: 30px;
+    flex: 1;
+    display: flex;
+}
+
+.exit-button {
+    height: 30px;
+    width: 30px;
+    background-color: #222;
+    transition: background-color .3s;
+    background-image: url(../icons/close.png);
+    background-position: center;
+    background-size: 22px 22px;
+    -webkit-app-region: no-drag;
+}
+
+.exit-button:hover {
+    background-color: rgb(215, 21, 38);
+}
+
+.sub-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.sub-header p {
+    margin: 0;
+}
+
+.ip-select {
+    margin-left: 4px;
+}
+
+.spacer{
+    flex: 1
+}
