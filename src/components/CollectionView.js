@@ -8,15 +8,9 @@ import TableRow from '@material-ui/core/TableRow';
 import './CollectionView.css';
 import { connect } from 'react-redux'
 import { SelectPacket } from '../actions/actions'
+import { GetProtocolName } from '../util/util'
 
 class CollectionView extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            selected: -1
-        }
-    }
 
     render() {
 
@@ -41,7 +35,7 @@ class CollectionView extends Component {
                                         dispatch(SelectPacket(index));
                                     }}>
                                     <TableCell component="th" scope="row">
-                                        {row.protocol}
+                                        {GetProtocolName(row.protocol)}
                                     </TableCell>
                                     <TableCell align="right">{row.from}</TableCell>
                                     <TableCell align="right">{row.to}</TableCell>

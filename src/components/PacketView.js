@@ -1,26 +1,19 @@
 import React, { Component } from 'react';
 import './PacketView.css';
 import { connect } from 'react-redux'
-
-function GetProtocolName(id) {
-    switch (id) {
-        case 6:
-            return 'TCP';
-        default:
-            return 'Other(' + id + ')'
-    }
-}
+import { GetProtocolName } from '../util/util'
 
 class PacketView extends Component {
 
     render() {
 
-        const protocol = GetProtocolName(this.props.selected >= 0 ? this.props.packets[this.props.selected].protocol : 0);
-        const source = this.props.selected >= 0 ? this.props.packets[this.props.selected].from : 0;
-        const destination = this.props.selected >= 0 ? this.props.packets[this.props.selected].to : 0;
+        const protocol = GetProtocolName(this.props.packets[this.props.selected].protocol);
+        const source = this.props.packets[this.props.selected].from;
+        const destination = this.props.packets[this.props.selected].to;
+        const payloadSize = this.props.packets[this.props.selected].size;
 
-        const payloadHex = this.props.selected >= 0 ? this.props.packets[this.props.selected].data : 0;
-        const payloadHuman = this.props.selected >= 0 ? this.props.packets[this.props.selected].data : 0;
+        const payloadHex = payloadSize > 0 ? this.props.packets[this.props.selected].hex : 'Empty packet';
+        const payloadReadable = payloadSize > 0 ? this.props.packets[this.props.selected].data : 'Empty packet';
 
         return (
             <div className="Packet-view">
@@ -29,6 +22,7 @@ class PacketView extends Component {
                     <p>Packet protocol: {protocol}</p>
                     <p>Packet source: {source}</p>
                     <p>Packet destination: {destination}</p>
+                    <p>Packet payload size: {payloadSize}</p>
                 </div>
                 <div className="packet-hex">
                     <p className="header">Payload hex</p>
@@ -36,7 +30,7 @@ class PacketView extends Component {
                 </div>
                 <div className="packet-byte">
                     <p className="header">Payload ASCII</p>
-                    {payloadHuman}
+                    {payloadReadable}
                 </div>
             </div>
         );

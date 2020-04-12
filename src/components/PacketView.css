@@ -22,19 +22,12 @@
 }
 
 .packet-hex{
-    display: flex;
-    background: #f5f5f5;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
+    text-align: left;
 }
 
 .packet-byte{
-    display: flex;
-    background: #f5f5f5;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
+    text-align: left;
+    word-break: break-all;
 }
 
 .header{
