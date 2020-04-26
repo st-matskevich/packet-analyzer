@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { AddPackets, ToggleListener, SelectIP } from '../actions/actions'
+import { AddPackets, ToggleListener, SelectIP, ClearPackets } from '../actions/actions'
 import './Header.css';
 
 import RecordIcon from '../icons/record.png'
@@ -25,7 +25,7 @@ class Header extends Component {
                         onChange={(event) => { this.props.dispatch(SelectIP(event.target.value)) }} >
                         {this.props.availableIPs.map((ip) => {
                             return (
-                                <option value={ip.key}>{ip.string}</option>
+                                <option key={ip.key} value={ip.key}>{ip.string}</option>
                             )
                         })}
                     </select>
@@ -45,6 +45,10 @@ class Header extends Component {
                             }
                             this.props.dispatch(ToggleListener(!this.props.listening));
                         }}>
+                    </div>
+                    <div className="trash-button" onClick={() => {
+                        this.props.dispatch(ClearPackets());
+                    }}>
                     </div>
                 </div>
             </header>

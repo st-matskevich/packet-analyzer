@@ -27,3 +27,7 @@ export const ToggleListener = flag => ({
     type: 'TOGGLE_LISTENER',
     payload: flag
 })
+
+export const ClearPackets = () => ({
+    type: 'CLEAR_PACKETS'
+})

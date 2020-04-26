@@ -30,7 +30,7 @@ class CollectionView extends Component {
                         {this.props.packets.map((row) => {
                             return (
                                 <TableRow key={row.id} hover
-                                    selected={this.props.selected && this.props.selected.id == row.id}
+                                    selected={this.props.selected && this.props.selected.id === row.id}
                                     onClick={() => {
                                         dispatch(SelectPacket(row));
                                     }}>

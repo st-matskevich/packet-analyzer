@@ -13,11 +13,12 @@ export default function reducer(state = initialState, action) {
         case ('SELECT_IP'):
             return { ...state, selectedIP: action.payload }
         case ('CLEAR_PACKETS'):
-            return { ...state, packets: [] }
+            return { ...state, packets: [], selectedPacket: undefined}
         case ('ADD_PACKETS'):
             return { ...state, packets: [...state.packets.slice(Math.max(0, state.packets.length - MAX_PACKETS + action.payload.length)), ...action.payload] }
+        default:
+            return state;
     }
-    return state;
 }
 
 const initialState = {
