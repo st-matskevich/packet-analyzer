@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { AddPacket, ToggleListener } from '../actions/actions'
+import { AddPackets, ToggleListener } from '../actions/actions'
 import './Header.css';
 
 import RecordIcon from '../icons/record.png'
@@ -36,7 +36,7 @@ class Header extends Component {
                         onClick={() => {
                             if (!this.props.listening) {
                                 window.Listener.listen((packet) => {
-                                    this.props.dispatch(AddPacket(packet));
+                                    this.props.dispatch(AddPackets(packet));
                                 });
                             } else {
                                 window.Listener.stop();

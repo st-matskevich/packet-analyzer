@@ -13,7 +13,7 @@ export default function reducer(state = initialState, action) {
         case ('CLEAR_PACKETS'):
             return { ...state, packets: [] }
         case ('ADD_PACKETS'):
-            return { ...state, packets: [...state.packets.slice(Math.max(0, state.packets.length - MAX_PACKETS + 1)), action.payload] }
+            return { ...state, packets: [...state.packets.slice(Math.max(0, state.packets.length - MAX_PACKETS + action.payload.length)), ...action.payload] }
     }
     return state;
 }
@@ -21,7 +21,7 @@ export default function reducer(state = initialState, action) {
 const initialState = {
     hostname: 'host1',
     availableIPs: [],
-    selectedPacket: -1,
+    selectedPacket: undefined,
     listening: false,
     packets: []
 };

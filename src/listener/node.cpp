@@ -1,28 +1,60 @@
 #include "listener.hpp"
 #include <nan.h>
 #include <uv.h>
+#include <queue>
+#include <mutex>
 
 uv_async_t gotPacket;
 Nan::Persistent<v8::Function> callback;
 Listener listener;
-Packet lastPacket;
+
+std::queue<Packet> packets;
+std::mutex packetsMutex;
+long packetCounter = 0;
+
+void AddPacket(const Packet packet)
+{
+	packets.push(packet);
+}
+
+bool GetPacket(Packet& packet)
+{
+	if(packets.empty())
+		return false;
+
+	packet = packets.front();
+	packets.pop();
+	return true;
+}
 
 void GotPacket(uv_async_t *handle)
 {
+	packetsMutex.lock();
 	v8::Isolate *isolate = v8::Isolate::GetCurrent();
-	Packet *packet = (Packet *)handle->data;
+	v8::Local<v8::Array> result = Nan::New<v8::Array>();
+	int resultSize = 0;
 
-	v8::Local<v8::Object> result = Nan::New<v8::Object>();
-	result->Set(isolate->GetCurrentContext(), Nan::New("protocol").ToLocalChecked(), Nan::New(packet->protocol));
-	result->Set(isolate->GetCurrentContext(), Nan::New("size").ToLocalChecked(), Nan::New(packet->data_size));
-	result->Set(isolate->GetCurrentContext(), Nan::New("from").ToLocalChecked(), Nan::New(packet->from).ToLocalChecked());
-	result->Set(isolate->GetCurrentContext(), Nan::New("to").ToLocalChecked(), Nan::New(packet->to).ToLocalChecked());
-	result->Set(isolate->GetCurrentContext(), Nan::New("data").ToLocalChecked(), Nan::New(packet->readable_data).ToLocalChecked());
-	result->Set(isolate->GetCurrentContext(), Nan::New("hex").ToLocalChecked(), Nan::New(packet->hex_data).ToLocalChecked());
+	Packet packet;
+	while(GetPacket(packet))
+	{
+		packetCounter++;
+		v8::Local<v8::Object> packetObject = Nan::New<v8::Object>();
+		packetObject->Set(isolate->GetCurrentContext(), Nan::New("protocol").ToLocalChecked(), Nan::New(packet.protocol));
+		packetObject->Set(isolate->GetCurrentContext(), Nan::New("id").ToLocalChecked(), Nan::New(packetCounter));
+		packetObject->Set(isolate->GetCurrentContext(), Nan::New("size").ToLocalChecked(), Nan::New(packet.data_size));
+		packetObject->Set(isolate->GetCurrentContext(), Nan::New("from").ToLocalChecked(), Nan::New(packet.from).ToLocalChecked());
+		packetObject->Set(isolate->GetCurrentContext(), Nan::New("to").ToLocalChecked(), Nan::New(packet.to).ToLocalChecked());
+		packetObject->Set(isolate->GetCurrentContext(), Nan::New("data").ToLocalChecked(), Nan::New(packet.readable_data).ToLocalChecked());
+		packetObject->Set(isolate->GetCurrentContext(), Nan::New("hex").ToLocalChecked(), Nan::New(packet.hex_data).ToLocalChecked());
+
+		result->Set(isolate->GetCurrentContext(), resultSize, packetObject);
+		resultSize++;
+	}
 
 	const int argc = 1;
 	v8::Local<v8::Value> argv[argc] = {result};
 	v8::Local<v8::Function>::New(isolate, callback)->Call(isolate->GetCurrentContext(), v8::Null(isolate), argc, argv);
+	packetsMutex.unlock();
 }
 
 void StartListen(const Nan::FunctionCallbackInfo<v8::Value> &info)
@@ -37,9 +69,10 @@ void StartListen(const Nan::FunctionCallbackInfo<v8::Value> &info)
 	callback.Reset(local);
 
 	listener.listen(Listener::get_ips()[0], [](Packet packet) {
-		lastPacket = packet;
-		gotPacket.data = (void *)&lastPacket;
+		packetsMutex.lock();
+		AddPacket(packet);
 		uv_async_send(&gotPacket);
+		packetsMutex.unlock();
 	});
 
 	uv_async_init(uv_default_loop(), &gotPacket, GotPacket);

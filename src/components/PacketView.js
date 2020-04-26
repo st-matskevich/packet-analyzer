@@ -7,13 +7,13 @@ class PacketView extends Component {
 
     render() {
 
-        const protocol = GetProtocolName(this.props.packets[this.props.selected].protocol);
-        const source = this.props.packets[this.props.selected].from;
-        const destination = this.props.packets[this.props.selected].to;
-        const payloadSize = this.props.packets[this.props.selected].size;
+        const protocol = this.props.selected ? GetProtocolName(this.props.selected.protocol) : '';
+        const source = this.props.selected ? this.props.selected.from : '';
+        const destination = this.props.selected ? this.props.selected.to : '';
+        const payloadSize = this.props.selected ? this.props.selected.size : 0;
 
-        const payloadHex = payloadSize > 0 ? this.props.packets[this.props.selected].hex : 'Empty packet';
-        const payloadReadable = payloadSize > 0 ? this.props.packets[this.props.selected].data : 'Empty packet';
+        const payloadHex = payloadSize > 0 ? this.props.selected.hex : 'Empty packet';
+        const payloadReadable = payloadSize > 0 ? this.props.selected.data : 'Empty packet';
 
         return (
             <div className="Packet-view">
@@ -39,7 +39,6 @@ class PacketView extends Component {
 
 function mapStateToProps(state) {
     return {
-        packets: state.packets,
         selected: state.selectedPacket
     }
 }

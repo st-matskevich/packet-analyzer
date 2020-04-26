@@ -27,12 +27,12 @@ class CollectionView extends Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {this.props.packets.map((row, index) => {
+                        {this.props.packets.map((row) => {
                             return (
-                                <TableRow key={index} hover
-                                    selected={this.props.selected == index}
+                                <TableRow key={row.id} hover
+                                    selected={this.props.selected && this.props.selected.id == row.id}
                                     onClick={() => {
-                                        dispatch(SelectPacket(index));
+                                        dispatch(SelectPacket(row));
                                     }}>
                                     <TableCell component="th" scope="row">
                                         {GetProtocolName(row.protocol)}

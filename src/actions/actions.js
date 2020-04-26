@@ -1,11 +1,11 @@
-export const SelectPacket = id => ({
+export const SelectPacket = packet => ({
     type: 'SELECT_PACKET',
-    payload: id
+    payload: packet
 })
 
-export const AddPacket = packet => ({
+export const AddPackets = packets => ({
     type: 'ADD_PACKETS',
-    payload: packet
+    payload: packets
 })
 
 export const SetHostname = hostname => ({

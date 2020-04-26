@@ -18,7 +18,7 @@ class App extends Component {
       <div className="App">
         <Header></Header>
         <CollectionView></CollectionView>
-        {this.props.selected >= 0 ? <PacketView></PacketView> : null}
+        {this.props.selected ? <PacketView></PacketView> : null}
       </div>
     );
   }
