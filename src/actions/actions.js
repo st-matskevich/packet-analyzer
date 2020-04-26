@@ -13,6 +13,11 @@ export const SetHostname = hostname => ({
     payload: hostname
 })
 
+export const SelectIP = ip => ({
+    type: 'SELECT_IP',
+    payload: ip
+})
+
 export const SetAvailableIPs = ips => ({
     type: 'SET_AVAILABLE_IPS',
     payload: ips

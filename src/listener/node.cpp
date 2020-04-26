@@ -59,16 +59,18 @@ void GotPacket(uv_async_t *handle)
 
 void StartListen(const Nan::FunctionCallbackInfo<v8::Value> &info)
 {
-	if (info.Length() < 1 || !info[0]->IsFunction())
+	v8::Local<v8::Context> context = info.GetIsolate()->GetCurrentContext();
+	if (info.Length() < 2 || !info[0]->IsNumber() || !info[1]->IsFunction())
 	{
 		return;
 	}
 
 	listener.stop();
-	v8::Local<v8::Function> local = v8::Local<v8::Function>::Cast(info[0]);
+	unsigned int ip = info[0]->NumberValue(context).FromJust();
+	v8::Local<v8::Function> local = v8::Local<v8::Function>::Cast(info[1]);
 	callback.Reset(local);
 
-	listener.listen(Listener::get_ips()[0], [](Packet packet) {
+	listener.listen(ip, [](Packet packet) {
 		packetsMutex.lock();
 		AddPacket(packet);
 		uv_async_send(&gotPacket);
@@ -76,6 +78,7 @@ void StartListen(const Nan::FunctionCallbackInfo<v8::Value> &info)
 	});
 
 	uv_async_init(uv_default_loop(), &gotPacket, GotPacket);
+	info.GetReturnValue().Set(Nan::New(ip));
 }
 
 void StopListen(const Nan::FunctionCallbackInfo<v8::Value> &info)

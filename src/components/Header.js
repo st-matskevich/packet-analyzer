@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { AddPackets, ToggleListener } from '../actions/actions'
+import { AddPackets, ToggleListener, SelectIP } from '../actions/actions'
 import './Header.css';
 
 import RecordIcon from '../icons/record.png'
@@ -20,7 +20,9 @@ class Header extends Component {
                     <p>Host name: {this.props.hostname}</p>
                     <div className="spacer"></div>
                     <p>IP to bind to</p>
-                    <select className="ip-select">
+                    <select className="ip-select"
+                        value={this.props.selectedIP}
+                        onChange={(event) => { this.props.dispatch(SelectIP(event.target.value)) }} >
                         {this.props.availableIPs.map((ip) => {
                             return (
                                 <option value={ip.key}>{ip.string}</option>
@@ -35,7 +37,7 @@ class Header extends Component {
                         }}
                         onClick={() => {
                             if (!this.props.listening) {
-                                window.Listener.listen((packet) => {
+                                window.Listener.listen(Number(this.props.selectedIP), (packet) => {
                                     this.props.dispatch(AddPackets(packet));
                                 });
                             } else {
@@ -54,6 +56,7 @@ function mapStateToProps(state) {
     return {
         hostname: state.hostname,
         availableIPs: state.availableIPs,
+        selectedIP: state.selectedIP,
         listening: state.listening
     }
 }

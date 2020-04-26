@@ -9,7 +9,9 @@ export default function reducer(state = initialState, action) {
         case ('SET_HOSTNAME'):
             return { ...state, hostname: action.payload }
         case ('SET_AVAILABLE_IPS'):
-            return { ...state, availableIPs: action.payload }
+            return { ...state, selectedIP : state.selectedIP ? state.selectedIP : action.payload[0].key, availableIPs: action.payload }
+        case ('SELECT_IP'):
+            return { ...state, selectedIP: action.payload }
         case ('CLEAR_PACKETS'):
             return { ...state, packets: [] }
         case ('ADD_PACKETS'):
@@ -22,6 +24,7 @@ const initialState = {
     hostname: 'host1',
     availableIPs: [],
     selectedPacket: undefined,
+    selectedIP: undefined,
     listening: false,
     packets: []
 };
