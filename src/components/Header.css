@@ -70,3 +70,12 @@
     background-size: contain;
     cursor: pointer;
 }
+
+.filter-button{
+    width: 20px;
+    height: 20px;
+    background: url(../icons/filter.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+}

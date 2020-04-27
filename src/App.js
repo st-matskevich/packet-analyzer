@@ -3,6 +3,7 @@ import './App.css';
 import Header from './components/Header'
 import CollectionView from './components/CollectionView'
 import PacketView from './components/PacketView'
+import DialogContainer from './components/DialogContainer'
 import { connect } from 'react-redux'
 import { SetHostname, SetAvailableIPs } from './actions/actions'
 
@@ -19,6 +20,7 @@ class App extends Component {
         <Header></Header>
         <CollectionView></CollectionView>
         {this.props.selected ? <PacketView></PacketView> : null}
+        {this.props.showDialogs ? <DialogContainer></DialogContainer> : null}
       </div>
     );
   }
@@ -26,7 +28,8 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    selected: state.selectedPacket
+    selected: state.selectedPacket,
+    showDialogs: state.showDialogs
   }
 }
 

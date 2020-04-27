@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { AddPackets, ToggleListener, SelectIP, ClearPackets } from '../actions/actions'
+import { AddPackets, ToggleListener, SelectIP, ClearPackets, ShowFilterDialog } from '../actions/actions'
 import './Header.css';
 
 import RecordIcon from '../icons/record.png'
@@ -48,6 +48,10 @@ class Header extends Component {
                     </div>
                     <div className="trash-button" onClick={() => {
                         this.props.dispatch(ClearPackets());
+                    }}>
+                    </div>
+                    <div className="filter-button" onClick={() => {
+                        this.props.dispatch(ShowFilterDialog());
                     }}>
                     </div>
                 </div>

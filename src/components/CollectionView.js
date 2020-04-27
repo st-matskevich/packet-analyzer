@@ -8,12 +8,11 @@ import TableRow from '@material-ui/core/TableRow';
 import './CollectionView.css';
 import { connect } from 'react-redux'
 import { SelectPacket } from '../actions/actions'
-import { GetProtocolName } from '../util/util'
+import { GetProtocolName, FilterPacket, ValidateFilter } from '../util/util'
 
 class CollectionView extends Component {
 
     render() {
-
         const dispatch = this.props.dispatch;
 
         return (
@@ -28,7 +27,7 @@ class CollectionView extends Component {
                     </TableHead>
                     <TableBody>
                         {this.props.packets.map((row) => {
-                            return (
+                            return (FilterPacket(row, this.props.filter) ?
                                 <TableRow key={row.id} hover
                                     selected={this.props.selected && this.props.selected.id === row.id}
                                     onClick={() => {
@@ -39,7 +38,7 @@ class CollectionView extends Component {
                                     </TableCell>
                                     <TableCell align="right">{row.from}</TableCell>
                                     <TableCell align="right">{row.to}</TableCell>
-                                </TableRow>)
+                                </TableRow> : null)
                         })}
                     </TableBody>
                 </Table>
@@ -51,7 +50,8 @@ class CollectionView extends Component {
 function mapStateToProps(state) {
     return {
         packets: state.packets,
-        selected: state.selectedPacket
+        selected: state.selectedPacket,
+        filter: state.filter
     }
 }
 

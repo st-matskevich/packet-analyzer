@@ -31,3 +31,16 @@ export const ToggleListener = flag => ({
 export const ClearPackets = () => ({
     type: 'CLEAR_PACKETS'
 })
+
+export const ShowFilterDialog = () => ({
+    type: 'SHOW_FILTER_DIALOG'
+})
+
+export const CloseFilterDialog = () => ({
+    type: 'HIDE_FILTER_DIALOG'
+})
+
+export const SetFilter = filter => ({
+    type: 'SET_FILTER',
+    payload: filter
+})
